@@ -18,14 +18,19 @@ struct Node {
     // constructor
     Node() = default;
     Node(string name, int ufid);
+    void print();
 };
 
 class AVL {
 private:
-    Node* insertRecursive(Node* node, string name, int ufid);
+    vector<Node*> lookForBugs;  // vector for debugging
+    Node* nodeZero = nullptr;
+    Node* insertNode(Node* root, string name, int ufid);
+    void rotateLeft(Node* root);
 public:
-    Node* root = nullptr;
+
     void insert(string name, int ufid);
+    void debug();
 };
 
 
