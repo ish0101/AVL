@@ -58,7 +58,7 @@ Node *AVL::insertNode(Node *root, string name, int ufid) {
         return root;
     }
 
-    // set the root's height
+    // calculate root's height
     int heightL=0, heightR = 0;
     if(root->left)
         heightL = root->left->height;
@@ -70,10 +70,27 @@ Node *AVL::insertNode(Node *root, string name, int ufid) {
     // balance factor = heightL - heightR
     // a node is imbalanced if -1 > bf > 1
     int bf = heightL - heightR;
-    if(-1 > bf || bf > 1){
+
+    // right heavy
+    if(bf<-1){
+        // single rotation
+        if(root->right->right->height > root->right->left->height){
+            if (root == nodeZero){
+                nodeZero = rotateLeft(root);
+            }
+            else{
+                rotateLeft(root);
+            }
+        }
+        //double rotation
+        else{
+            rotateRightLeft(root);
+        }
+    }
+    // left heavy
+    else if(bf>1){
 
     }
-
 
 
     return root;
@@ -85,6 +102,40 @@ void AVL::debug() {
     }
 }
 
-void AVL::rotateLeft(Node *root) {
+// right-right case (right heavy)
+// left rotation
+Node* AVL::rotateLeft(Node *root) {
+    Node* grandchild  = root->right->left;
+    Node* newParent = root->right;
+    newParent->left = root;
+    root->right = grandchild;
+    return newParent;
+}
 
+Node *AVL::rotateRight(Node *root) {
+    Node* grandchild = root->left->right;
+    Node* newParent = root->left;
+    newParent->right = root;
+    root->left = grandchild;
+    return newParent;
+}
+
+Node *AVL::rotateRightLeft(Node *root) {
+    Node* newParent = root->left->left;
+    Node* rootLeftChild = root->left;
+    root->left->left = newParent->left;
+    root->left = newParent->left;
+    newParent->left = rootLeftChild;
+    newParent->left = root;
+    return newParent;
+}
+
+Node *AVL::rotateLeftRight(Node *root) {
+    Node* newParent = root->left->right;
+    Node* rootLeftChild = root->left;
+    root->left->right = newParent->left;
+    root->left = newParent->right;
+    newParent->left = rootLeftChild;
+    newParent->right = root;
+    return newParent;
 }

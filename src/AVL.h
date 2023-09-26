@@ -26,7 +26,10 @@ private:
     vector<Node*> lookForBugs;  // vector for debugging
     Node* nodeZero = nullptr;
     Node* insertNode(Node* root, string name, int ufid);
-    void rotateLeft(Node* root);
+    Node* rotateLeft(Node* root);
+    Node* rotateRight(Node* root);
+    Node* rotateRightLeft(Node* root);
+    Node* rotateLeftRight(Node* root);
 public:
 
     void insert(string name, int ufid);
