@@ -21,10 +21,10 @@ int main() {
 //    tree.insert("adkins",5);
 
 
-    tree.insert("c", 4);
+    tree.insert("a", 4);
     tree.insert("b", 7);
-    tree.insert("a", 10);
-    tree.insert("a", 11);
+    tree.insert("c", 10);
+    tree.insert("d", 12);
 
     tree.debug();
 

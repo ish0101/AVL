@@ -13,7 +13,7 @@ Node::Node(string name, int ufid) {
 }
 
 //  for debugging purposes
-void Node::print() {
+const void Node::print() const{
     cout << "\nName: " << name << endl;
     cout << "ufid: " << ufid << endl;
     cout << "height: " << height << endl;
@@ -32,7 +32,7 @@ void AVL::insert(string name, int ufid) {
     insertNode(nodeZero, name, ufid);
 }
 
-Node *AVL::insertNode(Node *root, string name, int ufid) {
+Node *AVL::insertNode(Node *root, const string& name, int ufid) {
     if (!root){
         Node* node = new Node(name, ufid);
         lookForBugs.push_back(node);
@@ -58,45 +58,35 @@ Node *AVL::insertNode(Node *root, string name, int ufid) {
         return root;
     }
 
-    // calculate root's height
-    int heightL=0, heightR = 0;
-    if(root->left)
-        heightL = root->left->height;
-    if(root->right)
-        heightR = root->right->height;
-    root->height = 1+max(heightL, heightR);
-
-    // perform AVL balancing operations
-    // balance factor = heightL - heightR
-    // a node is imbalanced if -1 > bf > 1
-    int bf = heightL - heightR;
-
     // right heavy
-    if(bf<-1){
-        // single rotation
-        if(root->right->right->height > root->right->left->height){
-            if (root == nodeZero){
-                nodeZero = rotateLeft(root);
-            }
-            else{
-                rotateLeft(root);
-            }
-        }
-        //double rotation
-        else{
+    if(balanceFactor(root)<=-1){
+        if(balanceFactor(root->right) >= 1){ // if tree's right subtree is left heavy
+            // perform right-left rotation, update height
             rotateRightLeft(root);
         }
+        else{ // right subtree is right heavy
+            // perform left-left rotation, update height
+            rotateLeft(root);
+        }
     }
-    // left heavy
-    else if(bf>1){
-
-    }
-
+//    // left heavy
+//    else if(balanceFactor(root)>1){
+//        rotateLeftRight(root);
+//        updateHeight(root);
+//        if(balanceFactor(root->left)<-1){
+//            // if left subtree is right heavy
+//            // perform left right rotation, update height
+//        }
+//        else{
+//            rotateLeft(root);
+//        }
+//    }
+    updateHeight(root);
 
     return root;
 }
 
-void AVL::debug() {
+const void AVL::debug() const {
     for(auto nodes : lookForBugs){
         nodes->print();
     }
@@ -138,4 +128,33 @@ Node *AVL::rotateLeftRight(Node *root) {
     newParent->left = rootLeftChild;
     newParent->right = root;
     return newParent;
+}
+
+int AVL::balanceFactor(Node *root) {
+    // calculate root's height
+    int heightL=0, heightR = 0;
+    if(root->left)
+        heightL = root->left->height;
+    if(root->right)
+        heightR = root->right->height;
+    root->height = 1+max(heightL, heightR);
+
+    // perform AVL balancing operations
+    // balance factor = heightL - heightR
+    // a node is imbalanced if -1 > bf > 1
+    return (heightL - heightR);
+}
+
+void AVL::updateHeight(Node *root) {
+    int heightL=0, heightR = 0;
+    if(root->left)
+        heightL = root->left->height;
+    if(root->right)
+        heightR = root->right->height;
+    root->height = 1+max(heightL, heightR);
+
+    // leaf node's height
+    if(!root->left && !root->right){
+        root->height = 0;
+    }
 }

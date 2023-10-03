@@ -18,22 +18,24 @@ struct Node {
     // constructor
     Node() = default;
     Node(string name, int ufid);
-    void print();
+    const void print()const;
 };
 
 class AVL {
 private:
     vector<Node*> lookForBugs;  // vector for debugging
     Node* nodeZero = nullptr;
-    Node* insertNode(Node* root, string name, int ufid);
+    Node* insertNode(Node* root, const string& name, int ufid);
     Node* rotateLeft(Node* root);
     Node* rotateRight(Node* root);
     Node* rotateRightLeft(Node* root);
     Node* rotateLeftRight(Node* root);
+    int balanceFactor(Node* root);
+    void updateHeight(Node* root);
 public:
 
     void insert(string name, int ufid);
-    void debug();
+    const void debug() const;
 };
 
 
