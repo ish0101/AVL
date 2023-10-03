@@ -25,6 +25,13 @@ int main() {
     tree.insert("b", 7);
     tree.insert("c", 10);
     tree.insert("d", 12);
+    tree.insert("e", 11);
+    tree.insert("f", 1);
+
+    cout << "hello";
+//    tree.insert("a", 1);
+//    tree.insert("b", 8);
+//    tree.insert("c", 6);
 
     tree.debug();
 

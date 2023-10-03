@@ -18,7 +18,7 @@ struct Node {
     // constructor
     Node() = default;
     Node(string name, int ufid);
-    const void print()const;
+    void print()const;
 };
 
 class AVL {
@@ -32,10 +32,11 @@ private:
     Node* rotateLeftRight(Node* root);
     int balanceFactor(Node* root);
     void updateHeight(Node* root);
+    void balanceTree(Node* root);
 public:
 
     void insert(string name, int ufid);
-    const void debug() const;
+    void debug() const;
 };
 
 
