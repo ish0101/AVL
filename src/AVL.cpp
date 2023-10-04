@@ -29,9 +29,20 @@ Node *AVL::insertNode(Node *root, const string& name, int ufid) {
     }
     if (ufid < root->ufid){
         root->left = insertNode(root->left, name, ufid);
+        if(balancePerformed){
+            // point to the new parent node after rotation
+            root->left = newRootNodeAfterBalance;
+            balancePerformed = false;
+        }
+        updateHeight(root);
     }
     else if (ufid > root->ufid){
         root->right = insertNode(root->right, name, ufid);
+        if(balancePerformed){
+            // point to the new parent node after rotation
+            root->right = newRootNodeAfterBalance;
+            balancePerformed = false;
+        }
     }
     else {
         // the id is not unique
@@ -53,28 +64,30 @@ void AVL::balanceTree(Node* root) {
     int bf = balanceFactor(root);
     // right heavy
     if(bf<-1){
-        if(balanceFactor(root->right) > 1){ // if tree's right subtree is left heavy
+        // if tree's right subtree is left heavy
+        if(balanceFactor(root->right) > 0){
             // perform right-left rotation, update height
             rotateRightLeft(root);
             updateHeight(root);
             cout << "rotateRightLeft" << endl;
         }
-        else{ // right subtree is right heavy
-            // perform left-left rotation, update height
+        // right subtree is right heavy
+        else{
             rotateLeft(root);
             updateHeight(root);
             cout << "rotateLeft" << endl;
         }
     }
-        // left heavy
+    // left heavy
     else if(bf>1){
         // if tree's left subtree is right heavy
-        if(balanceFactor(root->left)<-1){
-            // perform left right rotation, update height
+        if(balanceFactor(root->left) < 0){
+            // perform left-right rotation, update height
             rotateLeftRight(root);
             updateHeight(root);
             cout << "rotateLeftRight" << endl;
         }
+        // left subtree is left heavy
         else{
             rotateRight(root);
             updateHeight(root);
@@ -120,8 +133,13 @@ Node* AVL::rotateLeft(Node *root) {
 
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "newParent = " << newParent->name << endl;
+        cout << "nodeZero = " << nodeZero->name << endl;
     }
+    balancePerformed = true;
+    newRootNodeAfterBalance = newParent;
+    updateHeight(newParent->right);
+    updateHeight(newParent->left);
+    updateHeight(newParent);
     return newParent;
 }
 
@@ -130,38 +148,56 @@ Node *AVL::rotateRight(Node *root) {
     Node* newParent = root->left;
     newParent->right = root;
     root->left = grandchild;
+
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "newParent = " << newParent->name << endl;
+        cout << "nodeZero = " << nodeZero->name << endl;
     }
+    balancePerformed = true;
+    newRootNodeAfterBalance = newParent;
+    updateHeight(newParent->right);
+    updateHeight(newParent->left);
+    updateHeight(newParent);
     return newParent;
 }
 
 Node *AVL::rotateRightLeft(Node *root) {
-    Node* newParent = root->left->left;
-    Node* rootLeftChild = root->left;
-    root->left->left = newParent->left;
-    root->left = newParent->left;
-    newParent->left = rootLeftChild;
+    Node* newParent = root->right->left;
+    Node* rootRightChild = root->right;
+    root->right = newParent->left;
+    rootRightChild->left = newParent->right;
     newParent->left = root;
+    newParent->right = rootRightChild;
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "newParent = " << newParent->name << endl;
+        cout << "nodeZero = " << nodeZero->name << endl;
     }
+    cout << "hello ismael, new parent is: " <<  newParent->name  << endl;
+    balancePerformed = true;
+    newRootNodeAfterBalance = newParent;
+    updateHeight(newParent->right);
+    updateHeight(newParent->left);
+    updateHeight(newParent);
     return newParent;
 }
 
 Node *AVL::rotateLeftRight(Node *root) {
     Node* newParent = root->left->right;
     Node* rootLeftChild = root->left;
-    root->left->right = newParent->left;
     root->left = newParent->right;
-    newParent->left = rootLeftChild;
+    rootLeftChild->right = newParent->left;
     newParent->right = root;
+    newParent->left = rootLeftChild;
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "newParent = " << newParent->name << endl;
+        cout << "nodeZero = " << nodeZero->name << endl;
     }
+    cout << "hello ismael, new parent is: " <<  newParent->name  << endl;
+    balancePerformed = true;
+    newRootNodeAfterBalance = newParent;
+    updateHeight(newParent->left);
+    updateHeight(newParent->right);
+    updateHeight(newParent);
     return newParent;
 }
 

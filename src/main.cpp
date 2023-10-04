@@ -21,12 +21,17 @@ int main() {
 //    tree.insert("adkins",5);
 
 
-    tree.insert("a", 4);
-    tree.insert("b", 7);
-    tree.insert("c", 10);
-    tree.insert("d", 12);
-    tree.insert("e", 11);
-    tree.insert("f", 1);
+    tree.insert("4", 4);
+    tree.insert("7", 7);
+    tree.insert("10", 10);
+    tree.insert("12", 12);
+    tree.insert("11", 11);
+    tree.insert("15", 15);
+    tree.insert("13", 13);
+    tree.insert("8", 8);
+    tree.insert("9", 9);
+    tree.insert("2", 2);
+    tree.insert("1", 1);
 
     cout << "hello";
 //    tree.insert("a", 1);
