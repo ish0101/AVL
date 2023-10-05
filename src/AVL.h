@@ -2,6 +2,7 @@
 // Created by Ismael Maura on 9/18/23.
 //
 #include <iostream>
+#include <queue>
 
 #ifndef AVL_AVL_H
 #define AVL_AVL_H
@@ -18,12 +19,12 @@ struct Node {
     // constructor
     Node() = default;
     Node(string name, int ufid);
-    void print()const;
+//    void print()const;
 };
 
 class AVL {
 private:
-    vector<Node*> lookForBugs;  // vector for debugging
+    //vector<Node*> lookForBugs;  // vector for debugging
     Node* nodeZero = nullptr;
     Node* newRootNodeAfterBalance = nullptr;
     Node* insertNode(Node* root, const string& name, int ufid);
@@ -34,10 +35,12 @@ private:
     int balanceFactor(Node* root);
     void updateHeight(Node* root);
     void balanceTree(Node* root);
+    Node* searchName(Node* root, const string& name);
+    Node* searchUFID(Node* root, const int ufid);
 public:
     void test();
     void insert(string name, int ufid);
-    void debug() const;
+    //void debug() const;
 };
 
 

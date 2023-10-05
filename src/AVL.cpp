@@ -4,6 +4,47 @@
 
 #include "AVL.h"
 
+string AVL::search(const string& name) {
+    return searchName(nodeZero, name);
+}
+
+// use level order traversal to search through the tree
+Node* AVL::searchName(Node* root, const string& name) {
+    queue<Node*> queue;
+    if (root == nullptr) return nullptr;
+
+    queue.push(root);
+    while (!queue.empty()) {
+        int size = queue.size();
+        for (int i = 0; i < size; i++) {
+            Node* node = queue.front();
+            if (node->name == name){
+                return node;
+            }
+            queue.pop();
+        }
+    }
+    return nullptr;
+}
+
+Node* AVL::searchUFID(Node* root, const int ufid) {
+    queue<Node*> queue;
+    if (root == nullptr) return nullptr;
+
+    queue.push(root);
+    while (!queue.empty()) {
+        int size = queue.size();
+        for (int i = 0; i < size; i++) {
+            Node* node = queue.front();
+            if (node->ufid == ufid){
+                return node;
+            }
+            queue.pop();
+        }
+    }
+    return nullptr;
+}
+
 Node::Node(string name, int ufid) {
     this->name = name;
     this->ufid = ufid;
@@ -13,13 +54,14 @@ Node::Node(string name, int ufid) {
 }
 
 void AVL::insert(string name, int ufid) {
+    // input validation
     insertNode(nodeZero, name, ufid);
 }
 
 Node *AVL::insertNode(Node *root, const string& name, int ufid) {
     if (!root){
         Node* node = new Node(name, ufid);
-        lookForBugs.push_back(node);
+        //lookForBugs.push_back(node);
 
         if(!nodeZero){
             // keep a pointer to the root of the tree
@@ -124,7 +166,7 @@ Node* AVL::rotateLeft(Node *root) {
 
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "nodeZero = " << nodeZero->name << endl;
+//        cout << "nodeZero = " << nodeZero->name << endl;
     }
     else{
         updateHeight(newParent->left);
@@ -143,7 +185,7 @@ Node *AVL::rotateRight(Node *root) {
 
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "nodeZero = " << nodeZero->name << endl;
+//        cout << "nodeZero = " << nodeZero->name << endl;
     }
     else{
         // edge case if we are at the root, we dont need to
@@ -165,7 +207,7 @@ Node *AVL::rotateRightLeft(Node *root) {
     newParent->right = rootRightChild;
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "nodeZero = " << nodeZero->name << endl;
+//        cout << "nodeZero = " << nodeZero->name << endl;
     }
     else{
         updateHeight(newParent->right);
@@ -185,7 +227,7 @@ Node *AVL::rotateLeftRight(Node *root) {
     newParent->left = rootLeftChild;
     if(root == nodeZero){
         nodeZero = newParent;
-        cout << "nodeZero = " << nodeZero->name << endl;
+//        cout << "nodeZero = " << nodeZero->name << endl;
     }
     else{
         updateHeight(newParent->left);
@@ -200,23 +242,23 @@ void AVL::test() {
 
 }
 
-void AVL::debug() const {
-    for(auto nodes : lookForBugs){
-        nodes->print();
-    }
-}
+//void AVL::debug() const {
+//    for(auto nodes : lookForBugs){
+//        nodes->print();
+//    }
+//}
 
 //  for debugging purposes
-void Node::print() const{
-    cout << "\nufid: " << ufid << endl;
-    cout << "height: " << height << endl;
-    if(!left)
-        cout << "left: nullptr"<< endl;
-    else
-        cout << "left: " << left->ufid << endl;
-    if(!right)
-        cout << "right: nullptr"<< endl;
-    else
-        cout << "right: " << right->ufid << endl;
-
-}
+//void Node::print() const{
+//    cout << "\nufid: " << ufid << endl;
+//    cout << "height: " << height << endl;
+//    if(!left)
+//        cout << "left: nullptr"<< endl;
+//    else
+//        cout << "left: " << left->ufid << endl;
+//    if(!right)
+//        cout << "right: nullptr"<< endl;
+//    else
+//        cout << "right: " << right->ufid << endl;
+//
+//}
