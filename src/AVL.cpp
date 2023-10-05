@@ -68,13 +68,11 @@ void AVL::balanceTree(Node* root) {
             // perform right-left rotation, update height
             rotateRightLeft(root);
             updateHeight(root);
-            cout << "rotateRightLeft" << endl;
         }
         // right subtree is right heavy
         else{
             rotateLeft(root);
             updateHeight(root);
-            cout << "rotateLeft" << endl;
         }
     }
     // left heavy
@@ -84,13 +82,11 @@ void AVL::balanceTree(Node* root) {
             // perform left-right rotation, update height
             rotateLeftRight(root);
             updateHeight(root);
-            cout << "rotateLeftRight" << endl;
         }
         // left subtree is left heavy
         else{
             rotateRight(root);
             updateHeight(root);
-            cout << "rotateRight" << endl;
         }
     }
 }
@@ -150,6 +146,8 @@ Node *AVL::rotateRight(Node *root) {
         cout << "nodeZero = " << nodeZero->name << endl;
     }
     else{
+        // edge case if we are at the root, we dont need to
+        // point previous node to the new node, (there is no previous node)
         updateHeight(newParent->left);
         updateHeight(newParent->right);
         updateHeight(newParent);
@@ -169,10 +167,12 @@ Node *AVL::rotateRightLeft(Node *root) {
         nodeZero = newParent;
         cout << "nodeZero = " << nodeZero->name << endl;
     }
-    updateHeight(newParent->right);
-    updateHeight(newParent->left);
-    updateHeight(newParent);
-    newRootNodeAfterBalance = newParent;
+    else{
+        updateHeight(newParent->right);
+        updateHeight(newParent->left);
+        updateHeight(newParent);
+        newRootNodeAfterBalance = newParent;
+    }
     return newParent;
 }
 
@@ -187,11 +187,17 @@ Node *AVL::rotateLeftRight(Node *root) {
         nodeZero = newParent;
         cout << "nodeZero = " << nodeZero->name << endl;
     }
-    updateHeight(newParent->left);
-    updateHeight(newParent->right);
-    updateHeight(newParent);
-    newRootNodeAfterBalance = newParent;
+    else{
+        updateHeight(newParent->left);
+        updateHeight(newParent->right);
+        updateHeight(newParent);
+        newRootNodeAfterBalance = newParent;
+    }
     return newParent;
+}
+
+void AVL::test() {
+
 }
 
 void AVL::debug() const {
@@ -202,16 +208,15 @@ void AVL::debug() const {
 
 //  for debugging purposes
 void Node::print() const{
-    cout << "\nName: " << name << endl;
-    cout << "ufid: " << ufid << endl;
+    cout << "\nufid: " << ufid << endl;
     cout << "height: " << height << endl;
     if(!left)
         cout << "left: nullptr"<< endl;
     else
-        cout << "left: " << left->name << endl;
+        cout << "left: " << left->ufid << endl;
     if(!right)
         cout << "right: nullptr"<< endl;
     else
-        cout << "right: " << right->name << endl;
+        cout << "right: " << right->ufid << endl;
 
 }

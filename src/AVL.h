@@ -35,7 +35,7 @@ private:
     void updateHeight(Node* root);
     void balanceTree(Node* root);
 public:
-
+    void test();
     void insert(string name, int ufid);
     void debug() const;
 };
