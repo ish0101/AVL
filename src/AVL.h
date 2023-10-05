@@ -26,7 +26,6 @@ private:
     vector<Node*> lookForBugs;  // vector for debugging
     Node* nodeZero = nullptr;
     Node* newRootNodeAfterBalance = nullptr;
-    bool balancePerformed = false;
     Node* insertNode(Node* root, const string& name, int ufid);
     Node* rotateLeft(Node* root);
     Node* rotateRight(Node* root);

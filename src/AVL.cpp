@@ -20,8 +20,9 @@ Node *AVL::insertNode(Node *root, const string& name, int ufid) {
     if (!root){
         Node* node = new Node(name, ufid);
         lookForBugs.push_back(node);
+
         if(!nodeZero){
-            // keep a reference to the root of the tree
+            // keep a pointer to the root of the tree
             nodeZero = node;
         }
         cout << "successful" << endl;
@@ -29,24 +30,22 @@ Node *AVL::insertNode(Node *root, const string& name, int ufid) {
     }
     if (ufid < root->ufid){
         root->left = insertNode(root->left, name, ufid);
-        if(balancePerformed){
+        if(newRootNodeAfterBalance){
             // point to the new parent node after rotation
             root->left = newRootNodeAfterBalance;
-            balancePerformed = false;
+            newRootNodeAfterBalance = nullptr;
         }
-        updateHeight(root);
     }
     else if (ufid > root->ufid){
         root->right = insertNode(root->right, name, ufid);
-        if(balancePerformed){
+        if(newRootNodeAfterBalance){
             // point to the new parent node after rotation
             root->right = newRootNodeAfterBalance;
-            balancePerformed = false;
+            newRootNodeAfterBalance = nullptr;
         }
     }
     else {
         // the id is not unique
-        // must return the pointer to the element that already had the duplicate id
         cout << "unsuccessful" << endl;
         return root;
     }
@@ -103,10 +102,6 @@ int AVL::balanceFactor(Node *root) {
         heightL = root->left->height+1;
     if(root->right)
         heightR = root->right->height+1;
-
-    // perform AVL balancing operations
-    // balance factor = heightL - heightR
-    // a node is imbalanced if -1 > bf > 1
     return (heightL - heightR);
 }
 
@@ -135,11 +130,12 @@ Node* AVL::rotateLeft(Node *root) {
         nodeZero = newParent;
         cout << "nodeZero = " << nodeZero->name << endl;
     }
-    balancePerformed = true;
-    newRootNodeAfterBalance = newParent;
-    updateHeight(newParent->right);
-    updateHeight(newParent->left);
-    updateHeight(newParent);
+    else{
+        updateHeight(newParent->left);
+        updateHeight(newParent->right);
+        updateHeight(newParent);
+        newRootNodeAfterBalance = newParent;
+    }
     return newParent;
 }
 
@@ -153,11 +149,12 @@ Node *AVL::rotateRight(Node *root) {
         nodeZero = newParent;
         cout << "nodeZero = " << nodeZero->name << endl;
     }
-    balancePerformed = true;
-    newRootNodeAfterBalance = newParent;
-    updateHeight(newParent->right);
-    updateHeight(newParent->left);
-    updateHeight(newParent);
+    else{
+        updateHeight(newParent->left);
+        updateHeight(newParent->right);
+        updateHeight(newParent);
+        newRootNodeAfterBalance = newParent;
+    }
     return newParent;
 }
 
@@ -172,12 +169,10 @@ Node *AVL::rotateRightLeft(Node *root) {
         nodeZero = newParent;
         cout << "nodeZero = " << nodeZero->name << endl;
     }
-    cout << "hello ismael, new parent is: " <<  newParent->name  << endl;
-    balancePerformed = true;
-    newRootNodeAfterBalance = newParent;
     updateHeight(newParent->right);
     updateHeight(newParent->left);
     updateHeight(newParent);
+    newRootNodeAfterBalance = newParent;
     return newParent;
 }
 
@@ -192,12 +187,10 @@ Node *AVL::rotateLeftRight(Node *root) {
         nodeZero = newParent;
         cout << "nodeZero = " << nodeZero->name << endl;
     }
-    cout << "hello ismael, new parent is: " <<  newParent->name  << endl;
-    balancePerformed = true;
-    newRootNodeAfterBalance = newParent;
     updateHeight(newParent->left);
     updateHeight(newParent->right);
     updateHeight(newParent);
+    newRootNodeAfterBalance = newParent;
     return newParent;
 }
 
