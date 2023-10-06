@@ -4,47 +4,6 @@
 
 #include "AVL.h"
 
-string AVL::search(const string& name) {
-    return searchName(nodeZero, name);
-}
-
-// use level order traversal to search through the tree
-Node* AVL::searchName(Node* root, const string& name) {
-    queue<Node*> queue;
-    if (root == nullptr) return nullptr;
-
-    queue.push(root);
-    while (!queue.empty()) {
-        int size = queue.size();
-        for (int i = 0; i < size; i++) {
-            Node* node = queue.front();
-            if (node->name == name){
-                return node;
-            }
-            queue.pop();
-        }
-    }
-    return nullptr;
-}
-
-Node* AVL::searchUFID(Node* root, const int ufid) {
-    queue<Node*> queue;
-    if (root == nullptr) return nullptr;
-
-    queue.push(root);
-    while (!queue.empty()) {
-        int size = queue.size();
-        for (int i = 0; i < size; i++) {
-            Node* node = queue.front();
-            if (node->ufid == ufid){
-                return node;
-            }
-            queue.pop();
-        }
-    }
-    return nullptr;
-}
-
 Node::Node(string name, int ufid) {
     this->name = name;
     this->ufid = ufid;
@@ -240,6 +199,88 @@ Node *AVL::rotateLeftRight(Node *root) {
 
 void AVL::test() {
 
+}
+
+// searches for a matching name and prints UFID
+void AVL::search(const string &name) {
+    bool notFound = true;
+    queue<Node*> queue;
+    if (nodeZero == nullptr){
+        cout << "unsuccessful" << endl;
+        return;
+    }
+
+    queue.push(nodeZero);
+    while (!queue.empty()) {
+        int size = queue.size();
+        for (int i = 0; i < size; i++) {
+            Node* node = queue.front();
+            if (node->name == name){
+                cout << node->ufid << endl;
+                notFound = false;
+            }
+            queue.pop();
+            if(node->left)
+                queue.push(node->left);
+            if(node->right)
+                queue.push(node->right);
+        }
+    }
+    if(notFound)
+        cout << "unsuccessful" << endl;
+}
+
+// searches for a matching UFID and prints name
+void AVL::search(const int ufid) {
+    queue<Node*> queue;
+    if (nodeZero == nullptr){
+        cout << "unsuccessful" << endl;
+        return;
+    }
+
+    queue.push(nodeZero);
+    while (!queue.empty()) {
+        int size = queue.size();
+        for (int i = 0; i < size; i++) {
+            Node* node = queue.front();
+            if (node->ufid == ufid){
+                cout << node->name << endl;
+                return;
+            }
+            queue.pop();
+            if(node->left)
+                queue.push(node->left);
+            if(node->right)
+                queue.push(node->right);
+        }
+    }
+    cout << "unsuccessful" << endl;
+}
+
+void AVL::printLevelCount() {
+    cout << nodeZero->height+1 << endl;
+}
+
+void AVL::printInorder() {
+    queue<Node*> queue;
+    if (nodeZero == nullptr){
+        return;
+    }
+
+    queue.push(nodeZero);
+    while (!queue.empty()) {
+        int size = queue.size();
+        vector<string> names;
+        for (int i = 0; i < size; i++) {
+            Node* node = queue.front();
+            names.push_back(node->name);
+            queue.pop();
+            if(node->left)
+                queue.push(node->left);
+            if(node->right)
+                queue.push(node->right);
+        }
+    }
 }
 
 //void AVL::debug() const {

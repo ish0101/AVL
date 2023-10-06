@@ -40,6 +40,12 @@ private:
 public:
     void test();
     void insert(string name, int ufid);
+
+    void search(const int ufid);
+    void search(const string& name);
+
+    void printLevelCount();
+    void printInorder();
     //void debug() const;
 };
 
