@@ -271,6 +271,7 @@ void AVL::printInorder() {
             cout << ", ";
         }
     }
+    cout << endl;
 }
 
 void AVL::printInorder(Node* node, vector<string>& inorder) {
@@ -280,6 +281,163 @@ void AVL::printInorder(Node* node, vector<string>& inorder) {
     printInorder(node->left, inorder);
     inorder.push_back(node->name);
     printInorder(node->right, inorder);
+}
+
+void AVL::remove(Node *root,Node* parent, const int ufid) {
+    // search for node with matching UFID
+    if(!root)
+        return;
+
+    if(ufid < root->ufid)
+        remove(root->left, root, ufid);
+    else if(ufid > root->ufid)
+        remove(root->right, root, ufid);
+    // found node with matching ufid
+    else{
+        // has two children
+        if(root->left && root->right){
+            // replace root with right child's leftmost node.
+
+            // edge case (has no parent, is the root node or nodeZero)
+            if(!parent){
+                // find successor
+                Node* successor = root->right;
+                Node* successorParent = root;
+                while(successor->left != nullptr){
+                    if(successor->left->left == nullptr)
+                        successorParent = successor;
+                    successor = successor->left;
+                }
+                if(root->right->left == nullptr){
+                    // successor is immediately to the right of root
+                    nodeZero = root->right;
+                    nodeZero->left = root->left;
+                    delete root;
+                }
+                else{
+                    root->ufid = successor->ufid;
+                    root->name = successor->name;
+                    delete successor;
+                    // successor's parent should point to nullptr after
+                    // it's child has been deleted.
+                    successorParent->left = nullptr;
+                }
+                cout << "successful" << endl;
+            }
+            else if(parent->left == root){
+                // find successor
+                Node* successor = root->right;
+                Node* successorParent = nullptr;
+                while(successor->left != nullptr){
+                    if(successor->left->left == nullptr)
+                        successorParent = successor;
+                    successor = successor->left;
+                }
+                root->ufid = successor->ufid;
+                root->name = successor->name;
+                delete successor;
+                // successor's parent should point to nullptr after
+                // it's child has been deleted.
+                successorParent->left = nullptr;
+                cout << "successful" << endl;
+            }
+            // replace root with left child's rightmost node
+            else{
+                // find successor
+                Node* successor = root->left;
+                Node* successorParent = nullptr;
+                while(successor->right != nullptr){
+                    if(successor->right->right == nullptr)
+                        successorParent = successor;
+                    successor = successor->right;
+                }
+                root->ufid = successor->ufid;
+                root->name = successor->name;
+                delete successor;
+                // successor's parent should point to nullptr after
+                // it's child has been deleted.
+                successorParent->right = nullptr;
+                cout << "successful" << endl;
+            }
+        }
+        // has only one child
+        else if((!root->left && root->right) || (root->left && !root->right)){
+            if(parent->left == root){
+                // find successor
+                Node* successor = root->right;
+                Node* successorParent = nullptr;
+                while(successor->left != nullptr){
+                    if(successor->left->left == nullptr)
+                        successorParent = successor;
+                    successor = successor->left;
+                }
+                root->ufid = successor->ufid;
+                root->name = successor->name;
+                delete successor;
+                // successor's parent should point to nullptr after
+                // it's child has been deleted.
+                successorParent->left = nullptr;
+                cout << "successful" << endl;
+            }
+            else if(parent->right == root){
+                // find successor
+                Node* successor = root->left;
+                Node* successorParent = nullptr;
+                while(successor->right != nullptr){
+                    if(successor->right->right == nullptr)
+                        successorParent = successor;
+                    successor = successor->right;
+                }
+                root->ufid = successor->ufid;
+                root->name = successor->name;
+                delete successor;
+                // successor's parent should point to nullptr after
+                // it's child has been deleted.
+                successorParent->right = nullptr;
+                cout << "successful" << endl;
+            }
+        }
+        // is a leaf node
+        else if (!root->left && !root->right){
+            // remove pointer to the node to be deleted
+            if(parent->left == root)
+                parent->left = nullptr;
+            else if(parent->right == root)
+                parent->right = nullptr;
+            delete root;
+            cout << "successful" << endl;
+        }
+    }
+}
+
+void AVL::remove(int ufid) {
+    if(!nodeZero) {
+        // empty tree edge case
+        cout << "unsuccessful\n";
+    }
+    else
+        remove(nodeZero, nullptr, ufid);
+}
+
+void AVL::removeInorder(const int index) {
+    if(!nodeZero) {
+        cout << "unsuccessful\n";
+    }
+    else{
+        vector<Node*> inorder;
+        removeInorder(nodeZero,inorder);
+        remove(inorder[index]->ufid);
+    }
+}
+
+// put all the nodes into a vector inorder traversal
+void AVL::removeInorder(Node *root, vector<Node*>& inorder) {
+    if (root == nullptr) {
+        return;
+    }
+    removeInorder(root->left, inorder);
+    inorder.push_back(root);
+    removeInorder(root->right, inorder);
 }
 
 //void AVL::debug() const {

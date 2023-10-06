@@ -36,6 +36,8 @@ private:
     void updateHeight(Node* root);
     void balanceTree(Node* root);
     void printInorder(Node* node, vector<string>& inorder);
+    void remove(Node* root, Node* parent, const int ufid);
+    void removeInorder(Node* root,vector<Node*>& inorder);
 public:
     void test();
 
@@ -45,6 +47,9 @@ public:
     void search(const string& name);
     void printLevelCount();
     void printInorder();
+    void remove(const int ufid);
+    void removeInorder(const int index);
+
     //void debug() const;
 };
 

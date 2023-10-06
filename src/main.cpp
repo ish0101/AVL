@@ -11,7 +11,7 @@
 using namespace std;
 
 int main() {
-    int numCommands;
+    int numCommands=0;
     cin >> numCommands;
     cin.ignore(); // Ignore the newline character
 
@@ -30,10 +30,9 @@ int main() {
         string command;
         inStream >> command;
 
-
         if (command == "insert") {
             string name;
-            int ufid;
+            int ufid=0;
             inStream >> name;
             // Remove the quotation marks from the name
             name = name.substr(1, name.length() - 2);
@@ -46,7 +45,7 @@ int main() {
 
             // Try to parse the searchTerm as an integer (UFID)
             stringstream numStream(searchTerm);
-            int ufid;
+            int ufid=0;
             if (numStream >> ufid) {
                 // Successfully parsed as an integer, search by UFID
                 tree.search(ufid);
@@ -61,6 +60,20 @@ int main() {
         }
         else if(command == "printInorder"){
             tree.printInorder();
+        }
+        else if(command == "remove"){
+            // gotta make sure that the id length is strictly 8 characters
+            int ufid=0;
+            inStream >> ufid;
+            tree.remove(ufid);
+        }
+        else if(command == "removeInorder"){
+            // index is the displacement 0-based
+            // ie. abc, def, ghi, jkl
+            // removeInorder(2) will remove ghi
+            int index=0;
+            inStream >> index;
+            tree.removeInorder(index);
         }
     }
 
