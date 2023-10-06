@@ -35,15 +35,14 @@ private:
     int balanceFactor(Node* root);
     void updateHeight(Node* root);
     void balanceTree(Node* root);
-    Node* searchName(Node* root, const string& name);
-    Node* searchUFID(Node* root, const int ufid);
+    void printInorder(Node* node, vector<string>& inorder);
 public:
     void test();
+
     void insert(string name, int ufid);
-
     void search(const int ufid);
-    void search(const string& name);
 
+    void search(const string& name);
     void printLevelCount();
     void printInorder();
     //void debug() const;

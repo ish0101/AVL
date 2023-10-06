@@ -261,26 +261,25 @@ void AVL::printLevelCount() {
     cout << nodeZero->height+1 << endl;
 }
 
+// Wrapper function to start the traversal from the root
 void AVL::printInorder() {
-    queue<Node*> queue;
-    if (nodeZero == nullptr){
-        return;
-    }
-
-    queue.push(nodeZero);
-    while (!queue.empty()) {
-        int size = queue.size();
-        vector<string> names;
-        for (int i = 0; i < size; i++) {
-            Node* node = queue.front();
-            names.push_back(node->name);
-            queue.pop();
-            if(node->left)
-                queue.push(node->left);
-            if(node->right)
-                queue.push(node->right);
+    vector<string> inorder;
+    printInorder(nodeZero, inorder);
+    for(int i=0; i<inorder.size(); i++){
+        cout << inorder[i];
+        if(i < inorder.size()-1){
+            cout << ", ";
         }
     }
+}
+
+void AVL::printInorder(Node* node, vector<string>& inorder) {
+    if (node == nullptr) {
+        return;
+    }
+    printInorder(node->left, inorder);
+    inorder.push_back(node->name);
+    printInorder(node->right, inorder);
 }
 
 //void AVL::debug() const {
