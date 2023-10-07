@@ -10,6 +10,32 @@
 
 using namespace std;
 
+
+bool isValidUFID(int ufid) {
+    if (ufid < 0) {
+        return false; // UFID cannot be negative
+    }
+
+    int countDigits = 0;
+    while (ufid > 0) {
+        ufid /= 10;
+        countDigits++;
+    }
+
+    return countDigits == 8; // UFID must have exactly 8 digits
+}
+
+bool isValidName(const string& name) {
+    for (char c : name) {
+        if (!isalpha(c)) {
+            return false; // Name should only contain alphabet letters
+        }
+    }
+
+    return true;
+}
+
+
 int main() {
     int numCommands=0;
     cin >> numCommands;
@@ -37,7 +63,11 @@ int main() {
             // Remove the quotation marks from the name
             name = name.substr(1, name.length() - 2);
             inStream >> ufid;
-            tree.insert(name, ufid);
+
+            if(isValidName(name) && isValidUFID(ufid))
+                tree.insert(name, ufid);
+            else
+                cout << "unsuccessful" << endl;
         }
         else if (command == "search") {
             string searchTerm;
@@ -48,11 +78,17 @@ int main() {
             int ufid=0;
             if (numStream >> ufid) {
                 // Successfully parsed as an integer, search by UFID
-                tree.search(ufid);
+                if(isValidUFID(ufid))
+                    tree.search(ufid);
+                else
+                    cout << "unsuccessful" << endl;
             } else {
                 // Failed to parse as an integer, search by name
                 searchTerm = searchTerm.substr(1, searchTerm.length() - 2);
-                tree.search(searchTerm);
+                if(isValidName(searchTerm))
+                    tree.search(searchTerm);
+                else
+                    cout << "unsuccessful" << endl;
             }
         }
         else if(command == "printLevelCount"){
@@ -65,7 +101,10 @@ int main() {
             // gotta make sure that the id length is strictly 8 characters
             int ufid=0;
             inStream >> ufid;
-            tree.remove(ufid);
+            if(isValidUFID(ufid))
+                tree.remove(ufid);
+            else
+                cout << "unsuccessful" << endl;
         }
         else if(command == "removeInorder"){
             // index is the displacement 0-based
@@ -74,6 +113,12 @@ int main() {
             int index=0;
             inStream >> index;
             tree.removeInorder(index);
+        }
+        else if(command == "printPreorder"){
+            tree.printPreorder();
+        }
+        else if(command == "printPostorder"){
+            tree.printPostorder();
         }
     }
 

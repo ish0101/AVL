@@ -38,6 +38,8 @@ private:
     void printInorder(Node* node, vector<string>& inorder);
     void remove(Node* root, Node* parent, const int ufid);
     void removeInorder(Node* root,vector<Node*>& inorder);
+    void printPreorder(Node *node, vector<string>& preorder);
+    void printPostorder(Node* node, vector<string>& postorder);
 public:
     void test();
 
@@ -49,6 +51,8 @@ public:
     void printInorder();
     void remove(const int ufid);
     void removeInorder(const int index);
+    void printPreorder();
+    void printPostorder();
 
     //void debug() const;
 };

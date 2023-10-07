@@ -440,6 +440,57 @@ void AVL::removeInorder(Node *root, vector<Node*>& inorder) {
     removeInorder(root->right, inorder);
 }
 
+void AVL::printPreorder() {
+    vector<string> preorder;
+    printPreorder(nodeZero, preorder);
+    for(int i=0; i<preorder.size(); i++){
+        cout << preorder[i];
+        if(i < preorder.size()-1){
+            cout << ", ";
+        }
+    }
+    cout << endl;  // Add a newline character at the end for formatting
+}
+
+void AVL::printPreorder(Node* node, vector<string>& preorder) {
+    if (node == nullptr) {
+        return;
+    }
+
+    preorder.push_back(node->name);
+    // Recursively traverse the left subtree
+    printPreorder(node->left, preorder);
+    // Recursively traverse the right subtree
+    printPreorder(node->right, preorder);
+}
+
+
+void AVL::printPostorder() {
+    vector<string> postorder;
+    printPostorder(nodeZero, postorder);
+    for(int i=0; i<postorder.size(); i++){
+        cout << postorder[i];
+        if(i < postorder.size()-1){
+            cout << ", ";
+        }
+    }
+    cout << endl;  // Add a newline character at the end for formatting
+}
+
+// Post-order traversal of the AVL tree
+void AVL::printPostorder(Node* node, vector<string>& postorder) {
+    if (node == nullptr) {
+        return;
+    }
+
+    // Recursively traverse the left subtree
+    printPostorder(node->left, postorder);
+    // Recursively traverse the right subtree
+    printPostorder(node->right, postorder);
+    // Print the current node's data
+    postorder.push_back(node->name);
+}
+
 //void AVL::debug() const {
 //    for(auto nodes : lookForBugs){
 //        nodes->print();
